@@ -47,42 +47,35 @@ function SongWS() {
     };
 }
 
-//song cache
 var songcache = {};
-
 //caches frequently requested songs. If a song is not already cached 
-//it goes out to the real web service and stores the results in cache.
 function SongProxy() {
-    var songws = new SongWS();
- 
-    return {
-        getSong: function(songInput) {
-            if (!songcache[songInput]) //cache miss -> add to cache
-                songcache[songInput] = songws.getSong(songInput);
-            return songcache[songInput]; 
-        },
-        getCount: function() {
-            var count = 0;
-            for (var song in songcache) { count++; }
-            return songcache.count;
-        }
-    };
+  var songws = new SongWS();
+  return {
+      getSong: function(songInput) {
+          if (!songcache[songInput]) //cache miss -> add to cache
+              songcache[songInput] = songws.getSong(songInput);
+          return songcache[songInput]; 
+      },
+      getCount: function() {
+          var count = 0;
+          for (var song in songcache) { count++; }
+          return songcache.count;
+      }
+  };
 };
 
 var decorators = {};
-
 function getSongObj(songObj){
    var songImg = undefined;
    if (songObj.album.images.length) songImg = songObj.album.images[2].url;
    else songImg = "none";
-
    return new Song(songObj.name, songObj.artists[0].name, songImg, songObj.preview_url);
 }
 
 function SongView(data) {
     this.data = data;
     this.decorator;
-
     this.render = function(){
       if(this.decorator) {
         decorators[this.decorator].render(this.data);//if decorator used render with decorated view 
@@ -96,38 +89,36 @@ function SongView(data) {
     this.decorate = function(decorator){
       this.decorator = decorator;
     }
-  }
+}
 
 //create decorator for multiple songs view
 decorators.songsView = {
-
     render: function(data) {
        _.each(data.tracks.items, function(songObj, index){
          getSongObj(songObj).render("#song-template", "#song-container");
       })
-    }
+}
 
 };  
 
 // global display to distin
 var display = function(response) {
-      if (!response.tracks) {
-         $('#song-container').append("<div class='errorInput text-center'>Err0r enter a real song</div>");
-         return;
-      } 
-
-      if (response.tracks.items.length == 1) { // If song found and TODO: playback url exists
-        var songView = new SongView(response);
-        songView.render(); //play song
-      }
-      else if (response.tracks.items.length > 1) { // If multiple potential songs found display song list
-        var songView = new SongView(response);
-        songView.decorate('songsView');
-        songView.render();
-      }       
-      else {
-         $('#song-container').append("<div class='errorInput text-center'>unknown error</div>");
-      }
+  if (!response.tracks) {
+     $('#song-container').append("<div class='errorInput text-center'>Err0r enter a real song</div>");
+     return;
+  } 
+  if (response.tracks.items.length == 1) { // If song found and TODO: playback url exists
+    var songView = new SongView(response);
+    songView.render(); //play song
+  }
+  else if (response.tracks.items.length > 1) { // If multiple potential songs found display song list
+    var songView = new SongView(response);
+    songView.decorate('songsView');
+    songView.render();
+  }       
+  else {
+     $('#song-container').append("<div class='errorInput text-center'>unknown error</div>");
+  }
 };
 
 
@@ -135,18 +126,15 @@ var display = function(response) {
 $('form').on('submit', function(){
   event.preventDefault();
   $("#song-container").empty();
-
   //create a songProxy instance to search song in cache and redirect if necessary
   var songproxy = new SongProxy();
   // execute songproxy request and store result
   var response = songproxy.getSong($songInput.val());
   //display response
   display(response);
-
   $songInput.on("focusin", function(){
     $("#song-container div").remove();
   })
-
   $(document).ajaxStart(function () {
     $("#loading").show();
     }).ajaxStop(function () {
