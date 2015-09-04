@@ -1,0 +1,38 @@
+
+
+.artist{
+  color: #330099;
+  margin-right: 20px;
+}
+.btmBorder{
+  border-bottom: 2px dotted #FF00FF;
+}
+.container{
+  background-color: #978E89;
+}
+.errorInput{
+  color: red;
+}
+form{
+  margin-bottom: 2em;
+}
+.jumbotron{
+  background-color: rgba(52,152,219,1.0);
+  color: white;
+}
+
+#song-container{
+}
+.songRow{
+  background-color: #D8EBD6;
+}
+.top-margin-20{
+  margin-top: 20px;
+  min-height: 100%;
+}
+
+.title{
+  color: #990099;
+  margin-right: 20px;
+}
+
