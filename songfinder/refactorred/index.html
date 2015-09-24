@@ -35,7 +35,12 @@
     </div>
 
     <script type="text/template" id="song-template">
-        <div class="row btmBorder songRow"><span class="top-margin-20  col-xs-2"><img class="img-responsive " src="<%= img %>"></span><span class="artist col-xs-4">Artist: <%= artist %></span><span class="title col-xs-3">Song:<%= title %></span><a href="<%= play %>" class="col-xs-2 ">Preview</a></div>
+        <div class="row btmBorder songRow"><span class="top-margin-20  col-xs-2"><img class="img-responsive " src="<%= img %>"></span><span class="artist col-xs-4">Artist: <%= artist %></span><span class="title col-xs-3">Song:<%= title %></span><a href="<%= play %>" class="col-xs-2 " >Preview</a>
+          <audio id="songAudio">
+             <source id="spotifySong" src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+          </audio>
+        </div>
     </script>
 
 
