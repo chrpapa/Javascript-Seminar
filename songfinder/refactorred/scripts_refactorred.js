@@ -21,12 +21,18 @@ function PlayableSong(song){
   this.title = song.title;
   this.artist = song.artist;
   this.img = song.img;
-  this.play = song.playUrl || "#"; 
-  //TODO: make it to play - change view display info and play song automatically
+  this.play = song.play || "#"; 
+  var playUrl = this.play;
+
   this.render = function(templateSource, templateLocation){
     var $songTemplate = _.template( $(templateSource).html() );
     var $songLocation = $(templateLocation);
     $songLocation.append($songTemplate(this) );
+    //show audio controls and play song
+    var audio = document.getElementById("songAudio");
+    audio.setAttribute("controls","controls");
+    document.getElementById("spotifySong").src = playUrl;
+    audio.play(playUrl); 
   }
 }
 
@@ -105,7 +111,7 @@ decorators.songsView = {
 var display = function(response) {
   if (!response.tracks) {
      $('#song-container').append("<div class='errorInput text-center'>Err0r enter a real song</div>");
-     return;
+       return;
   } 
   if (response.tracks.items.length == 1) { // If song found and TODO: playback url exists
     var songView = new SongView(response);
