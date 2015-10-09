@@ -54,12 +54,14 @@ function SongWS() {
 }
 
 var songcache = {};
-//caches frequently requested songs. If a song is not already cached 
+//caches frequently requested songs. 
+//If a song is not already cached 
 function SongProxy() {
   var songws = new SongWS();
   return {
       getSong: function(songInput) {
-          if (!songcache[songInput]) //cache miss -> add to cache
+        //cache miss -> add to cache
+          if (!songcache[songInput]) 
               songcache[songInput] = songws.getSong(songInput);
           return songcache[songInput]; 
       },
@@ -84,12 +86,12 @@ function SongView(data) {
     this.decorator;
     this.render = function(){
       if(this.decorator) {
-        decorators[this.decorator].render(this.data);//if decorator used render with decorated view 
+        decorators[this.decorator].render(this.data);
         return;
       }
 
       var playableSong = new PlayableSong(getSongObj(data.tracks.items[0]))
-      playableSong.render("#song-template", "#song-container");//since its a playablesong instance it will start immediately to play
+      playableSong.render("#song-template", "#song-container");
     }
 
     this.decorate = function(decorator){
